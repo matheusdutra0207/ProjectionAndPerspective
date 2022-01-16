@@ -4,7 +4,7 @@ from numpy import mean
 
 class Plot:
 
-    def __init__(self, limit=[-6, 6], figsize=(10,10)):
+    def __init__(self, limit=[-8, 8], figsize=(6,6)):
         self.figure = plt.figure(figsize=figsize)
         self.ax = self.figure.add_subplot(projection='3d')
         self.ax.set_title("World")
@@ -16,7 +16,7 @@ class Plot:
         self.ax.set_zlabel("z axis")
 
     #adding quivers to the plot
-    def draw_arrows(self, point, base, length=1.5):
+    def draw_arrows(self, point, base, length=3):
         # The object base is a matrix, where each column represents the vector 
         # of one of the axis, written in homogeneous coordinates (ax,ay,az,0)    
         # Plot vector of x-axis
@@ -52,9 +52,9 @@ class Plot:
         self.ax.set_zlim3d([z_middle - plot_radius, z_middle + plot_radius])
 
 
-    def draw_stl(self, Object_stl, elev=25, azim=-35, dist=10):
+    def draw_stl(self, Object_stl, elev=25, azim=-35, dist=9):
         # Plot and render the faces of the object
-        self.ax.add_collection3d(art3d.Poly3DCollection(Object_stl.mesh_vectors))
+        #self.ax.add_collection3d(art3d.Poly3DCollection(Object_stl.mesh_vectors))
         # Plot the contours of the faces of the object
         self.ax.add_collection3d(art3d.Line3DCollection(Object_stl.mesh_vectors, colors='k', linewidths=0.2, linestyles='-'))
         # Plot the vertices of the object
@@ -62,10 +62,22 @@ class Plot:
         self.ax.auto_scale_xyz( Object_stl.mesh_homogeneous[0,:],
                                 Object_stl.mesh_homogeneous[1,:],
                                 Object_stl.mesh_homogeneous[2,:])
-        self._set_axes_equal()
+        #self._set_axes_equal()
         self.ax.view_init(elev=elev,azim=azim)
         self.ax.dist=dist
 
 
     def save_png(self, name='saved_figure'):
-        self.figure.savefig(f'image/{name}.png')
+        self.figure.savefig(fname = f'image/{name}.png', pad_inches = 5)
+
+class PlotImage:
+    def __init__(self, image, limit=[-30, 30], image_name = 'projection'):
+        self.figure = plt.figure()
+        self.ax = self.figure.add_subplot(111)
+        self.ax.set_title('Projected points')
+        self.ax.set_xlim(limit)
+        self.ax.set_xlabel("x axis")
+        self.ax.set_ylim(limit)
+        self.ax.set_ylabel("y axis")
+        self.ax.plot(image[0],image[1],'red')
+        self.figure.savefig(f'image/{image_name}.png')
