@@ -18,10 +18,10 @@ cd ProjectionAndPerspective/
 pip install -r requirements.txt
 ```
 
-### Go to for src/
+### Go to for scr/
 
 ```
-cd src/
+cd scr/
 ```
 
 ### Run the module main.py
