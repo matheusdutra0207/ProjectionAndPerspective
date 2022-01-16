@@ -34,3 +34,15 @@ def rotationY_matrix(angle_rad):
                [0              ,  0  ,  0             ,   1]
             ])
   return R_homogeneous
+
+def intrinsicParameter_matrix(f=5, sX = 10, sY = 10, sTheta = 0, oX = 0, oY = 0):
+  K = np.array([[f*sX, f*sTheta, oX],
+                [0,    f*sY,     oY],
+                [0,     0,       1]])
+  return K
+
+def projection_matrix():
+  pi0 = np.array([[1,     0,       0,  0],
+                  [0,     1,       0,  0],
+                  [0,     0,       1,  0]])
+  return pi0
