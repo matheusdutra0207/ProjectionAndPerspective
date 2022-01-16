@@ -1,7 +1,8 @@
 import numpy as np
 from stl import mesh
+from numpy.linalg import multi_dot
 
-from transformations import translation_matrix
+from transformations import translation_matrix, intrinsicParameter_matrix, projection_matrix
 
 class Coordinate:
     def __init__(self):
@@ -29,8 +30,25 @@ class Coordinate:
         self.base = np.dot(self._transformations, self.base)
 
     def rotateCoordinate_WorldReference(self, M):
-        self.point = np.dot(M, self.base)
+        self.base = np.dot(M, self.base)
         self._transformations = np.dot(self._transformations, M)
+
+    def imageCoordinate(self, Object_Stl, intrinsicParameter):
+        projection = projection_matrix()
+        self._transformations_inv = np.linalg.inv(self._transformations)
+        
+        image = multi_dot([intrinsicParameter, 
+                        projection,
+                        self._transformations_inv, 
+                        Object_Stl.mesh_homogeneous])
+                        
+        for i in range(0, len(image[2])):
+            image[0][i] = image[0][i]/image[2][i]
+            image[1][i] = image[1][i]/image[2][i]
+            image[2][i] = image[2][i]/image[2][i]
+        
+        return image
+        
 
 class Object_Stl:
 
