@@ -148,7 +148,7 @@
      <number>-99</number>
     </property>
     <property name="value">
-     <number>5</number>
+     <number>-5</number>
     </property>
    </widget>
    <widget class="QLabel" name="f">
