@@ -1,8 +1,9 @@
 import numpy as np
 from stl import mesh
 from numpy.linalg import multi_dot
+from math import pi
 
-from transformations import translation_matrix, intrinsicParameter_matrix, projection_matrix
+from transformations import translation_matrix, intrinsicParameter_matrix, projection_matrix, rotationY_matrix, rotationZ_matrix
 
 class Coordinate:
     def __init__(self):
@@ -11,34 +12,32 @@ class Coordinate:
         self._e3 = np.array([[0],[0],[1],[0]]) # Z
         self.base = np.hstack((self._e1, self._e2, self._e3))
         self.point = np.array([[0],[0],[0],[1]]) #origin point
-        self._transformations = translation_matrix(dx=0, dy=0, dz=0)
+        self.obj = np.eye(4)
+        self.obj[:,:3] = self.base
+        self.obj[:,-1] = self.point.T
+        self._transformations = multi_dot([translation_matrix(dx=7, dy=0, dz=0), rotationY_matrix(-pi/2), rotationZ_matrix(pi/2)])
+        self.obj = np.dot(self._transformations, self.obj)
+        self._projection = projection_matrix()
+        self._coordinateBox()
 
-    def moveCoordinate_ObjectReference(self, M): 
+    def transformationCoordinate_ObjectReference(self, M):
         self._transformations_inv = np.linalg.inv(self._transformations)
-        self.point = np.dot(self._transformations_inv, self.point)
-        self._transformations = np.dot(self._transformations, M)
-        self.point = np.dot(self._transformations, self.point)
+        M1 = multi_dot([self._transformations,      
+                        M, 
+                        self._transformations_inv])
+        self.obj = np.dot(M1, self.obj)
+        self._transformations = multi_dot([self._transformations, M])
+        self._coordinateBox()
 
-    def moveCoordinate_WorldReference(self, M): 
-        self.point = np.dot(M, self.point)
-        self._transformations = np.dot(self._transformations, M)
-        
-    def rotateCoordinate_ObjectReference(self, M): 
-        self._transformations_inv = np.linalg.inv(self._transformations)
-        self.base = np.dot(self._transformations_inv, self.base)
-        self._transformations = np.dot(self._transformations, M)
-        self.base = np.dot(self._transformations, self.base)
-
-    def rotateCoordinate_WorldReference(self, M):
-        self.base = np.dot(M, self.base)
-        self._transformations = np.dot(self._transformations, M)
+    def transformationCoordinate_WorldReference(self, M): 
+        self.obj = np.dot(M, self.obj)
+        self._transformations = multi_dot([M, self._transformations])
+        self._coordinateBox()
 
     def imageCoordinate(self, Object_Stl, intrinsicParameter):
-        projection = projection_matrix()
         self._transformations_inv = np.linalg.inv(self._transformations)
-        
         image = multi_dot([intrinsicParameter, 
-                        projection,
+                        self._projection,
                         self._transformations_inv, 
                         Object_Stl.mesh_homogeneous])
                         
@@ -46,8 +45,17 @@ class Coordinate:
             image[0][i] = image[0][i]/image[2][i]
             image[1][i] = image[1][i]/image[2][i]
             image[2][i] = image[2][i]/image[2][i]
-        
-        return image
+
+        self.image = image   
+        return self.image
+
+    def _coordinateBox(self):
+        self.obj_box = np.array([[-1,-1,-1],[1,-1,-1],[1,1,-1],[-1,1,-1],[-1,-1,-1],[-1,-1,1],[1,-1,1],[1,1,1],[-1,1,1],[-1,-1,1],[1,1,1],[-1,1,1],[1,-1,1]])
+        self.obj_box = np.vstack((self.obj_box.T,np.ones(self.obj_box.shape[0])))
+        self.obj_box = np.dot(self._transformations, self.obj_box)
+
+    def reset(self):
+        self.__init__()
         
 
 class Object_Stl:

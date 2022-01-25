@@ -66,6 +66,8 @@ class Plot:
         self.ax.view_init(elev=elev,azim=azim)
         self.ax.dist=dist
 
+    def draw_obj(self, obj):
+        self.ax.plot3D(obj[0,:], obj[1,:], obj[2,:],'--m')
 
     def save_png(self, name='saved_figure'):
         self.figure.savefig(fname = f'image/{name}.png', pad_inches = 5)
