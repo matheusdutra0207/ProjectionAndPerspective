@@ -146,7 +146,7 @@ if __name__ == '__main__':
     house = Object_Stl(name = "WoodHouse")
 
     # Define Projection in the image 
-    intrinsicParameter = intrinsicParameter_matrix( f=5, 
+    intrinsicParameter = intrinsicParameter_matrix( f=-5, 
                                                     sX = 10,
                                                     sY = 10,
                                                     sTheta = 0,

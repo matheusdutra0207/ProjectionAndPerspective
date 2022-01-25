@@ -10,11 +10,11 @@ class Coordinate:
         self._e1 = np.array([[1],[0],[0],[0]]) # X
         self._e2 = np.array([[0],[1],[0],[0]]) # Y
         self._e3 = np.array([[0],[0],[1],[0]]) # Z
-        self.base = np.hstack((self._e1, self._e2, self._e3))
-        self.point = np.array([[0],[0],[0],[1]]) #origin point
+        self._base = np.hstack((self._e1, self._e2, self._e3))
+        self._point = np.array([[0],[0],[0],[1]]) #origin point
         self.obj = np.eye(4)
-        self.obj[:,:3] = self.base
-        self.obj[:,-1] = self.point.T
+        self.obj[:,:3] = self._base
+        self.obj[:,-1] = self._point.T
         self._transformations = multi_dot([translation_matrix(dx=7, dy=0, dz=0), rotationY_matrix(-pi/2), rotationZ_matrix(pi/2)])
         self.obj = np.dot(self._transformations, self.obj)
         self._projection = projection_matrix()
