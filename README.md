@@ -6,7 +6,7 @@
 git clone https://github.com/matheusdutra0207/ProjectionAndPerspective.git
 ```
 
-### Go to for ProjectionAndPerspective
+### Go to ProjectionAndPerspective
 
 ```
 cd ProjectionAndPerspective/
@@ -18,7 +18,7 @@ cd ProjectionAndPerspective/
 pip install -r requirements.txt
 ```
 
-### Go to for scr/
+### Go to scr/
 
 ```
 cd scr/
