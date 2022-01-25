@@ -20,18 +20,18 @@ class Coordinate:
         self._projection = projection_matrix()
         self._coordinateBox()
 
-    def transformationCoordinate_ObjectReference(self, M):
+    def transformationCoordinate_ObjectReference(self, transformation):
         self._transformations_inv = np.linalg.inv(self._transformations)
-        M1 = multi_dot([self._transformations,      
-                        M, 
+        M = multi_dot([self._transformations,      
+                        transformation, 
                         self._transformations_inv])
-        self.obj = np.dot(M1, self.obj)
-        self._transformations = multi_dot([self._transformations, M])
+        self.obj = np.dot(M, self.obj)
+        self._transformations = multi_dot([self._transformations, transformation])
         self._coordinateBox()
 
-    def transformationCoordinate_WorldReference(self, M): 
-        self.obj = np.dot(M, self.obj)
-        self._transformations = multi_dot([M, self._transformations])
+    def transformationCoordinate_WorldReference(self, transformation): 
+        self.obj = np.dot(transformation, self.obj)
+        self._transformations = multi_dot([transformation, self._transformations])
         self._coordinateBox()
 
     def imageCoordinate(self, Object_Stl, intrinsicParameter):
