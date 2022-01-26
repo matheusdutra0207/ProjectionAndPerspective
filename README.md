@@ -32,5 +32,5 @@ python3 main.py
 
 ### This interface below should be shown
 
-<img src="https://github.com/matheusdutra0207/ProjectionAndPerspective/blob/master/image/interface.png" alt="700" width="700"/>
+<img src="https://github.com/matheusdutra0207/ProjectionAndPerspective/blob/master/image/interface.png" alt="600" width="600"/>
 
