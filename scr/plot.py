@@ -77,6 +77,7 @@ class PlotImage:
         self.figure = plt.figure()
         self.ax = self.figure.add_subplot(111)
         self.ax.set_title('Projected points')
+        self.ax.xaxis.tick_top() 
         self.ax.set_xlim(limit)
         self.ax.set_xlabel("x axis")
         self.ax.set_ylim(limit)
