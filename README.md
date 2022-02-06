@@ -30,7 +30,7 @@ cd scr/
 python3 main.py
 ```
 
-### This interface should be appear show
+### This interface below should be shown
 
-![alt text](https://github.com/matheusdutra0207/ProjectionAndPerspective/blob/master/image/interface.png)
+<img src="https://github.com/matheusdutra0207/ProjectionAndPerspective/blob/master/image/interface.png" alt="600" width="600"/>
 
